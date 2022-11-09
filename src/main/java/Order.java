@@ -1,24 +1,32 @@
 import java.util.*;
 
 public class Order {
+    private int c;
+    private List<String> prods = new ArrayList<>();
 
-    private List<String> products = new ArrayList<>();
+    private HashMap<String, Integer> hashOrder = new HashMap<>();
 
     public Order(String idOrder) {
     }
 
-    public void addLP(int quantity, String idProduct) {
-        for (int i = 0; i < quantity; i++) {
-            this.products.add(idProduct);
+    public int getQuantity(Order o) {
+        List<String> namesprods = o.getProducts();
+        for (String name : namesprods) {
+            this.c = hashOrder.size();
         }
-
+        return c;
     }
 
-    public Object getLP(int i) {
-        return null;
+    public List<String> getProducts() {
+        return prods;
     }
 
-    public int getQuantity() {
-        return products.size();
+    public void addProduct(int quant, String prod){
+
+        String product = prod.toLowerCase();
+
+        this.hashOrder.put(product,quant);
+        this.prods.add(prod);
+
     }
 }

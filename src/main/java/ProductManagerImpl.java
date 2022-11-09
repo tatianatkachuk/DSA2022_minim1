@@ -2,12 +2,13 @@ import java.util.*;
 
 public class ProductManagerImpl implements ProductManager{
 
-    private List<Product> productsList = new ArrayList<>();
-    private List<Order> orderList = new ArrayList<>();
+    private List<Product> productsList = new ArrayList<>(); // product list
+    private Queue<Order> orderQueue =  new LinkedList<>(); // orders queue
+    private HashMap<String, User> userList= new HashMap<>();  // user system list
 
-    private List<User> userList = new ArrayList<>();
+    private int cnt=0;
 
-    // private HashMap<Integer, User> users = new HashMap<>();
+
 
     //////////////////////////////////////////////////////////////////////////////////
     // USERS
@@ -18,10 +19,15 @@ public class ProductManagerImpl implements ProductManager{
         return userList.size();
     }
 
-    @Override
-    public void addUser(String userId, String name, String surname) {
-        User u = new User(userId, name, surname);
-        userList.add(u);
+    public void addUser(String userId, User user) {
+        userList.put(userId,user);
+        user.setUserId(userId);
+    }
+
+    public Collection<User> getAllUsers(){
+
+        return (Collection<User>) userList.values();
+
     }
 
 
@@ -35,30 +41,47 @@ public class ProductManagerImpl implements ProductManager{
         return productsList.size();
     }
 
-    @Override
     public void addProduct(String productId, String name, double price) {
         Product p = new Product(productId, name, price);
         productsList.add(p);
-
     }
 
-    @Override
-    public Product getProduct(String productId) {
-        return null;
+    public List<Product> getAllProducts() {
+        return productsList;
     }
 
     @Override
     public List<Product> productsByPrice() {
-        List<Product> list = new ArrayList<>(this.productsList);
-        return list;
+        List<Product> plist = new ArrayList<>(this.productsList);
+        if (!plist.isEmpty()){
+        Collections.sort(plist, new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return Double.compare(o1.getPrice(), o2.getPrice());
+            }
+        });
+        return plist;
+        }else return  null;
     }
 
     @Override
     public List<Product> productsBySales() {
-        List<Product> list = new ArrayList<>(this.productsList);
-        return list;
-    }
+        List<Product> plist = new ArrayList<>(this.productsList);
 
+        if (!plist.isEmpty()) {
+            Collections.sort(plist, new Comparator<Product>() {
+                @Override
+                public int compare(Product o1, Product o2) {
+                    return Integer.compare(o2.getNumSales(), o1.getNumSales());
+                }
+
+            });
+
+            return plist;
+
+
+        }else return  null;
+    }
 
 
 
@@ -67,9 +90,14 @@ public class ProductManagerImpl implements ProductManager{
     // ORDERS
     //////////////////////////////////////////////////////////////////////////////////
 
+    public Queue<Order> getOrders(){
+        return orderQueue;
+    }
+
+
     @Override
     public int numOrders() {
-        return orderList.size();
+        return orderQueue.size();
     }
 
     @Override
@@ -77,20 +105,39 @@ public class ProductManagerImpl implements ProductManager{
         return 0;
     }
 
-
     @Override
-    public void addOrder(Order order) {
-        orderList.add(order);
+    public Order addOrder(Order order) {
+        orderQueue.add(order);
+        return order;
     }
 
     @Override
     public List<Order> ordersByUser(String userId) {
-        return null;
+        User u = userList.get(userId);
+        return u.getOrdersUser();
     }
 
     @Override
     public Order processOrder() {
-        return null;
+
+        Order order = orderQueue.poll();  // order from queue
+
+        List<String> prods = order.getProducts();
+
+        for(String name:prods){
+
+            int quant = order.getQuantity(order);
+            if(quant==0){
+                return null;
+
+            }else{
+                for(Product p: productsList){
+                    if(name.equals(p.getName())){
+                        p.setNumSales(quant);
+                    }
+                }
+            }
+        }return order;
     }
 
 

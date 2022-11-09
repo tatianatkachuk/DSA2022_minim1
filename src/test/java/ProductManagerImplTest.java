@@ -11,9 +11,15 @@ public class ProductManagerImplTest {
     @Before
     public void setUp() {
         pm = new ProductManagerImpl();
-        pm.addUser("1111111", "Juan", "lopez");
-        pm.addUser("2222222",  "David", "Rincon");
-        pm.addUser("3333333",  "Juan", "Hernández");
+
+        User u1 = new User("1111111","Juan", "Lopez");
+        User u2 = new User("2222222","David", "Rincon");
+        User u3 = new User("3333333","Juan", "Hernández");
+
+
+        pm.addUser("1111111", u1);
+        pm.addUser("2222222",  u2);
+        pm.addUser("3333333",  u3);
 
         pm.addProduct("B001", "Coca cola", 2);
         pm.addProduct("C002", "Café amb gel", 1.5);
@@ -30,16 +36,16 @@ public class ProductManagerImplTest {
 
     private void prepareOrders() {
         Order o1 = new Order("1111111");
-        o1.addLP(3, "B001"); // quantity and idProduct ?
-        o1.addLP(2, "C002");
+        o1.addProduct(3, "B001"); // quantity and idProduct
+        o1.addProduct(2, "C002");
 
         Order o2 = new Order("1111111");
-        o2.addLP(3, "A002");
-        o2.addLP(1, "B001");
+        o2.addProduct(3, "A002");
+        o2.addProduct(1, "B001");
 
         Order o3 = new Order("2222222");
-        o3.addLP(3, "B001");
-        o3.addLP(2, "A002");
+        o3.addProduct(3, "B001");
+        o3.addProduct(2, "A002");
 
 
         Assert.assertEquals(0, this.pm.numOrders());
@@ -58,8 +64,8 @@ public class ProductManagerImplTest {
         Assert.assertEquals(3, this.pm.numOrders());
         // ...
         Order o4 = new Order("2222222");
-        o4.addLP(3, "B001");
-        o4.addLP(2, "A003");
+        o4.addProduct(3, "B001");
+        o4.addProduct(2, "A003");
         this.pm.addOrder(o4);
 
         Assert.assertEquals(4, this.pm.numOrders());
@@ -72,11 +78,12 @@ public class ProductManagerImplTest {
         Assert.assertEquals(4, this.pm.numProducts());
         Assert.assertEquals(3, this.pm.numOrders());
 
+
         Order order1 = this.pm.processOrder();
         Assert.assertEquals(2, this.pm.numOrders());
-        //Assert.assertEquals(3, order1.getLP(0).getQuantity());
-        //Assert.assertEquals(2, order1.getLP(1).getQuantity());
+        Assert.assertEquals(3, order1.getQuantity(order1));
         Assert.assertEquals(3, this.pm.numSales("B001"));
+
 
         Order order2 = this.pm.processOrder();
         Assert.assertEquals(1, this.pm.numOrders());

@@ -3,6 +3,9 @@ import java.util.*;
 public interface ProductManager {
 
     public int numUsers();
+
+
+
     public int numProducts();
 
     public int numOrders();
@@ -11,28 +14,32 @@ public interface ProductManager {
 
 
     // USERS
-    public void addUser(String userId, String name, String surname);
+    public void addUser(String userId, User user);//
 
 
 
     // PRODUCTS
-    public void addProduct(String productId, String name, double price);
+    public void addProduct(String productId, String name, double price);//
 
-    public Product getProduct(String productId);
 
-    List<Product> productsByPrice();
+    List<Product> productsByPrice();//
 
-    List<Product> productsBySales();
+    List<Product> productsBySales();//
+
+    List<Product> getAllProducts();//
 
 
 
 
     // ORDERS
-    public void addOrder(Order order);
+    public Order addOrder(Order order);//
 
-    public List<Order> ordersByUser(String userId);
+    public List<Order> ordersByUser(String userId);//
 
-    public Order processOrder();
+    public Queue<Order> getOrders();//
+
+
+    public Order processOrder();//
 
 
 

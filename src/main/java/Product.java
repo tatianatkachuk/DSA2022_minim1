@@ -1,3 +1,4 @@
+import java.util.*;
 public class Product {
 
     private String name;
@@ -18,7 +19,13 @@ public class Product {
         return price;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getProductId() {
         return null;
@@ -30,5 +37,8 @@ public class Product {
 
     public int getNumSales() {
         return numSales;
+    }
+    public void setNumSales(int numSales) {
+        this.numSales = numSales;
     }
 }
